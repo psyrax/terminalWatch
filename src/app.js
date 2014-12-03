@@ -36,7 +36,7 @@ mainWindow.add(timeElement);
 //Ecobici Element
 var ecobiciElement = new UI.Text({
   position: new Vector2(0,0),
-  size: new Vector2(144, 16),
+  size: new Vector2(144, 48),
   font: 'gothic-14',
   textAlign: 'center',
   text: 'Booting',
@@ -44,6 +44,17 @@ var ecobiciElement = new UI.Text({
 });
 
 mainWindow.add(ecobiciElement);
+
+//uberElement
+var uberElement = new UI.Text({
+  position: new Vector2(0,32),
+  size: new Vector2(144, 32),
+  font: 'gothic-14',
+  textAlign: 'center',
+  color: 'black'
+});
+
+mainWindow.add(uberElement);
 
 mainWindow.show();
 
@@ -58,6 +69,7 @@ mainWindow.on('click', 'up', function(event){
 function getLocationData(){
   navigator.geolocation.getCurrentPosition(function(pos){
     getBikes(pos);
+    getUber(pos);
   });
 }
 
@@ -68,20 +80,43 @@ function getBikes(pos){
     longitude: pos.coords.longitude
   };
   ajax(
+    {
+      url: 'http://ecobici.me/pb/',
+      type: 'json',
+      method: 'post',
+      data: positionData,
+      cache: false
+    },
+    function(data){
+      ecobiciElement.text(data.content);
+      Vibe.vibrate('short');
+    },
+    function(error){
+      console.log(error);
+    }
+  );
+  return true;
+}
+function getUber(pos){
+   var positionData = {
+    latitude: pos.coords.latitude,
+    longitude: pos.coords.longitude
+  };
+  ajax(
   {
-    url: 'http://ecobici.me/pb',
-    type: 'json',
-    method: 'post',
-    data: positionData,
-    cache: false
+     url: 'http://ecobici.me/uber/',
+      type: 'json',
+      method: 'post',
+      data: positionData,
+      cache: false
   },
   function(data){
-    ecobiciElement.text(data.content);
+    var dataJoint = data.join('\n');
+    uberElement.text(dataJoint);
     Vibe.vibrate('short');
   },
   function(error){
     console.log(error);
   }
   );
-  return true;
 }
