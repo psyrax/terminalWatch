@@ -27,7 +27,7 @@ var timeElement = new UI.TimeText({
   text: '%H : %M',
   position: new Vector2(0, 84),
   size: new Vector2(144, 84),
-  font: 'gothic-24-bold',
+  font: 'bitham-30-black',
   textAlign: 'center'
 });
 
@@ -51,7 +51,23 @@ var uberElement = new UI.Text({
   size: new Vector2(144, 32),
   font: 'gothic-14',
   textAlign: 'center',
-  color: 'black'
+  color: 'black',
+  text: ''
+});
+
+
+var menuTransporte = new UI.Menu({
+  sections: [{
+    title: 'Ecobicis a 500m',
+    items: [{
+      title: 'Cargando',
+    }]
+  }]
+});
+
+var ecobiciCard = new UI.Card({
+  scrollable :true,
+  style: 'small'
 });
 
 mainWindow.add(uberElement);
@@ -65,6 +81,15 @@ getLocationData();
 mainWindow.on('click', 'up', function(event){
   getLocationData();
 });
+
+mainWindow.on('click', 'select', function(event){
+  menuTransporte.show();
+  navigator.geolocation.getCurrentPosition(function(pos){
+    getStations(pos);
+  });
+});
+
+
 
 function getLocationData(){
   navigator.geolocation.getCurrentPosition(function(pos){
@@ -120,3 +145,32 @@ function getUber(pos){
   }
   );
 }
+function getStations(pos){
+   var positionData = {
+    latitude: pos.coords.latitude,
+    longitude: pos.coords.longitude
+  };
+  ajax(
+  {
+     url: 'http://ecobici.me/pbmenu/',
+      type: 'json',
+      method: 'post',
+      data: positionData,
+      cache: false
+  },
+  function(data){
+    console.log(data);
+    menuTransporte.items(0, data);
+    Vibe.vibrate('short');
+    menuTransporte.on('select', function(e){
+      ecobiciCard.title(e.item.title);
+      ecobiciCard.body(e.item.steps);
+      ecobiciCard.show();
+    });
+  },
+  function(error){
+    console.log(error);
+  }
+  );
+}
+
