@@ -4,13 +4,12 @@
         "location"
     ],
     "companyName": "psyrax@opiumgarden.org",
-    "longName": "TerminalWatchJS",
+    "longName": "Ecobici DX",
     "projectType": "pebblejs",
     "resources": {
         "media": [
             {
                 "file": "images/menu_icon.png",
-                "menuIcon": true,
                 "name": "IMAGE_MENU_ICON",
                 "type": "png"
             },
@@ -30,16 +29,22 @@
                 "type": "font"
             },
             {
+                "file": "images/appicon.png",
+                "menuIcon": true,
+                "name": "IMAGES_APPICON_PNG",
+                "type": "png"
+            },
+            {
                 "file": "images/dit_watchface.png",
                 "name": "IMAGES_DIT_WATCHFACE_PNG",
                 "type": "png"
             }
         ]
     },
-    "shortName": "TerminalWatchJS",
+    "shortName": "Ecobici",
     "uuid": "1099ae98-095a-410b-9b72-4262fae4fcc7",
     "versionCode": 1,
-    "versionLabel": "1.0",
+    "versionLabel": "1.1",
     "watchapp": {
         "watchface": false
     }
